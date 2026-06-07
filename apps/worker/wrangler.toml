@@ -1,0 +1,22 @@
+$schema = "../../node_modules/wrangler/config-schema.json"
+name = "hosting-edge-router"
+main = "src/index.ts"
+compatibility_date = "2026-06-06"
+workers_dev = true
+minify = true
+
+route = "*.myhosting.com/*"
+
+[[r2_buckets]]
+binding = "ASSETS"
+bucket_name = "your-bucket-name"
+
+[[kv_namespaces]]
+binding = "DEPLOYMENT_MAP"
+id = "your-kv-namespace-id"
+
+[vars]
+EDGE_API_BASE_URL = "http://localhost:4000"
+EDGE_API_SECRET = "replace-with-a-long-random-string"
+EDGE_ROOT_DOMAIN = "myhosting.com"
+

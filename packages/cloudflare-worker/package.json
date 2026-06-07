@@ -1,0 +1,6 @@
+{
+  "name": "@platform/cloudflare-worker",
+  "private": true,
+  "type": "module"
+}
+

@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DeploymentStatus {
+  pending
+  building
+  ready
+  failed
+}
+
+model User {
+  id                 String      @id @default(cuid())
+  githubId           String      @unique
+  githubLogin        String      @unique
+  name               String?
+  email              String?
+  avatarUrl          String?
+  githubAccessToken  String
+  githubRefreshToken String?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  projects           Project[]
+}
+
+model Project {
+  id                     String         @id @default(cuid())
+  userId                 String
+  user                   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  githubRepoId           String
+  githubRepoFullName     String         @unique
+  githubRepoName         String
+  githubDefaultBranch    String         @default("main")
+  buildCommand           String         @default("npm run build")
+  outputDir              String         @default("dist")
+  webhookSecret          String
+  subdomain              String         @unique
+  latestSuccessfulDeploymentId String?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  deployments            Deployment[]
+  customDomains          CustomDomain[]
+}
+
+model Deployment {
+  id           String           @id @default(cuid())
+  projectId    String
+  project      Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  commitSha    String
+  branch       String
+  status       DeploymentStatus @default(pending)
+  logs         String           @default("")
+  errorMessage String?
+  artifactPath String?
+  source       String           @default("push")
+  startedAt    DateTime?
+  finishedAt   DateTime?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  @@index([projectId, createdAt])
+}
+
+model CustomDomain {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  hostname    String   @unique
+  verifiedAt  DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+

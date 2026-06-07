@@ -1,0 +1,16 @@
+node_modules
+.next
+dist
+coverage
+*.log
+.env
+.env.local
+.DS_Store
+/.turbo
+/apps/api/prisma/dev.db
+/apps/api/prisma/migrations
+/apps/web/.next
+/apps/worker/.wrangler
+/apps/worker/.dev.vars
+/tmp
+

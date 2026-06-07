@@ -1,0 +1,16 @@
+{
+  "name": "@platform/worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "node -e \"process.stdout.write('Cloudflare Worker is bundled by Wrangler during deploy\\n')\""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250925.0",
+    "wrangler": "^4.32.0",
+    "typescript": "^5.9.2"
+  }
+}
